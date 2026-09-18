@@ -1,0 +1,17 @@
+name: Cloudflare Multi-DDNS
+version: "0.2.4"
+slug: cloudflare_multi_ddns
+description: Met à jour plusieurs enregistrements DNS Cloudflare en IPv4 et IPv6
+url: https://github.com/IdSec-Inc/HA-Cloudflare-DDNS
+arch:
+  - aarch64
+  - amd64
+startup: services
+boot: auto
+init: false
+ingress: true
+ingress_port: 8099
+watchdog: http://[HOST]:[PORT:8099]/api/status
+panel_icon: mdi:cloud-sync
+panel_title: Cloudflare DDNS
+schema: false

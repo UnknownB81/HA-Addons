@@ -1,0 +1,22 @@
+configuration:
+  api_token:
+    name: Jeton API Cloudflare
+    description: Jeton avec les droits Zone Read et DNS Edit.
+  interval:
+    name: Intervalle
+    description: Nombre de secondes entre deux vérifications.
+  create_missing:
+    name: Créer les enregistrements absents
+    description: Crée automatiquement un enregistrement DNS lorsqu'il est introuvable.
+  dry_run:
+    name: Mode simulation
+    description: Affiche les changements sans modifier Cloudflare.
+  ipv4_url:
+    name: Service de détection IPv4
+    description: URL retournant uniquement l'adresse IPv4 publique.
+  ipv6_url:
+    name: Service de détection IPv6
+    description: URL retournant uniquement l'adresse IPv6 publique.
+  records:
+    name: Enregistrements DNS
+    description: Noms DNS de type A ou AAAA à maintenir à jour.

@@ -1,0 +1,120 @@
+# ============================================================
+# 3) CARTES LOVELACE — à coller dans le dashboard (pas dans configuration.yaml)
+# Copiez chaque bloc "type: markdown" ci-dessous dans une carte "Manuel" (YAML)
+# ============================================================
+ 
+# --- Carte : Classement complet ---
+# type: markdown
+# title: NFL - Classement
+# content: >
+#   | Division | Équipe | V | D | % |
+#   |---|---|---|---|---|
+#   {% for t in state_attr('sensor.nfl_classement_complet','teams') or [] %}
+#   | {{ t.division }} | {{ t.team }} | {{ t.wins }} | {{ t.losses }} | {{ t.pct }} |
+#   {% endfor %}
+ 
+# --- Carte : Classement (version flex-table-card, triable et stylée) ---
+# Nécessite la carte custom "flex-table-card" installée via HACS
+# type: custom:flex-table-card
+# title: NFL - Classement
+# entities:
+#   include: sensor.nfl_classement_complet
+# columns:
+#   - name: Division
+#     id: div
+#     data: teams.division
+#   - name: Équipe
+#     id: team
+#     data: teams.team
+#   - name: V
+#     id: wins
+#     data: teams.wins
+#     align: center
+#     modify: parseInt(x)
+#   - name: D
+#     id: losses
+#     data: teams.losses
+#     align: center
+#     modify: parseInt(x)
+#   - name: "%"
+#     id: pct
+#     data: teams.pct
+#     align: center
+# sort_by: div+,wins-
+# css:
+#   table+: "border-collapse: collapse; width: 100%; font-size: 0.9em;"
+#   'thead th': 'text-transform: uppercase; font-size: 0.7em; letter-spacing: 0.05em; opacity: 0.6; padding: 6px;'
+#   'tbody tr:nth-child(even)': 'background-color: rgba(255,255,255,0.04);'
+#   'tbody tr td': 'padding: 6px;'
+#   'tbody tr:hover': 'background-color: rgba(255,255,255,0.08);'
+ 
+# --- Carte : onglets Pre-saison / Saison reguliere ---
+# Necessite les cartes custom "tabbed-card" et "flex-table-card" via HACS.
+type: custom:tabbed-card
+tabs:
+  - attributes:
+      label: Pre-saison
+    card:
+      type: vertical-stack
+      cards:
+        - type: custom:flex-table-card
+          title: NFL - Matchs de pre-saison
+          entities:
+            include: sensor.nfl_matchs_pre_saison
+          columns:
+            - { name: Date, data: games.date }
+            - { name: Exterieur, data: games.away_team }
+            - { name: "", data: games.away_score, align: center }
+            - { name: "", data: games.home_score, align: center }
+            - { name: Domicile, data: games.home_team }
+            - { name: Statut, data: games.status }
+            - { name: Stade, data: games.venue }
+        - type: custom:flex-table-card
+          title: NFL - Classement pre-saison
+          entities:
+            include: sensor.nfl_classement_pre_saison
+          columns:
+            - { name: Division, data: teams.division }
+            - { name: Equipe, data: teams.team }
+            - { name: V, data: teams.wins, align: center }
+            - { name: D, data: teams.losses, align: center }
+            - { name: '%', data: teams.pct, align: center }
+  - attributes:
+      label: Saison reguliere
+    card:
+      type: vertical-stack
+      cards:
+        - type: custom:flex-table-card
+          title: NFL - Matchs a venir
+          entities:
+            include: sensor.nfl_matchs_du_jour
+          columns:
+            - { name: Date, data: games.date }
+            - { name: Exterieur, data: games.away_team }
+            - { name: "", data: games.away_score, align: center }
+            - { name: "", data: games.home_score, align: center }
+            - { name: Domicile, data: games.home_team }
+            - { name: Statut, data: games.status }
+            - { name: Stade, data: games.venue }
+        - type: custom:flex-table-card
+          title: NFL - Classement
+          entities:
+            include: sensor.nfl_classement_complet
+          columns:
+            - { name: Division, data: teams.division }
+            - { name: Equipe, data: teams.team }
+            - { name: V, data: teams.wins, align: center }
+            - { name: D, data: teams.losses, align: center }
+            - { name: '%', data: teams.pct, align: center }
+        - type: custom:flex-table-card
+          title: NFL - Classement global
+          entities:
+            include: sensor.nfl_classement_global
+          columns:
+            - { name: Rang, data: teams.rank, align: center }
+            - { name: Equipe, data: teams.team }
+            - { name: Conference, data: teams.conference }
+            - { name: V, data: teams.wins, align: center }
+            - { name: D, data: teams.losses, align: center }
+            - { name: '%', data: teams.pct, align: center }
+ 

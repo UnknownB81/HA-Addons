@@ -1,0 +1,22 @@
+configuration:
+  api_token:
+    name: Cloudflare API token
+    description: Token with Zone Read and DNS Edit permissions.
+  interval:
+    name: Interval
+    description: Number of seconds between checks.
+  create_missing:
+    name: Create missing records
+    description: Automatically creates a DNS record when it does not exist.
+  dry_run:
+    name: Dry run
+    description: Logs changes without modifying Cloudflare.
+  ipv4_url:
+    name: IPv4 detection service
+    description: URL that returns only the public IPv4 address.
+  ipv6_url:
+    name: IPv6 detection service
+    description: URL that returns only the public IPv6 address.
+  records:
+    name: DNS records
+    description: A or AAAA DNS names to keep updated.

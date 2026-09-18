@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Cloudflare Multi-DDNS</title>
+    <link rel="stylesheet" href="./app.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">CF</div>
+      <div>
+        <h1>Cloudflare Multi-DDNS</h1>
+        <p>Gestion des enregistrements dynamiques</p>
+      </div>
+      <div id="status-badge" class="status-badge waiting">
+        <span class="status-dot"></span>
+        <span id="status-label">En attente</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="status-strip" aria-live="polite">
+        <div>
+          <span class="metric-label">Dernière réussite</span>
+          <strong id="last-success">Jamais</strong>
+        </div>
+        <div>
+          <span class="metric-label">Modifiés</span>
+          <strong id="changed-count">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">Inchangés</span>
+          <strong id="unchanged-count">0</strong>
+        </div>
+        <button id="sync-button" class="button secondary" type="button">Synchroniser maintenant</button>
+      </section>
+
+      <form id="config-form">
+        <section class="settings-section">
+          <div class="section-heading">
+            <div>
+              <h2>Connexion</h2>
+              <p>Accès sécurisé à l’API Cloudflare</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <label class="field token-field">
+              <span>Jeton API Cloudflare</span>
+              <input id="api-token" name="api_token" type="password" autocomplete="new-password" placeholder="Saisir ou conserver le jeton enregistré">
+              <small id="token-hint">Aucun jeton enregistré</small>
+            </label>
+            <div class="field action-field">
+              <span>Vérification</span>
+              <button id="test-button" class="button outline" type="button">Tester la connexion</button>
+              <small id="zone-count">Zones non vérifiées</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <div class="section-heading">
+            <div>
+              <h2>Planification</h2>
+              <p>Fréquence et comportement des mises à jour</p>
+            </div>
+          </div>
+          <div class="settings-grid three-columns">
+            <label class="field">
+              <span>Intervalle (secondes)</span>
+              <input id="interval" type="number" min="60" max="86400" step="1" required>
+            </label>
+            <label class="toggle-field">
+              <input id="dry-run" type="checkbox">
+              <span class="toggle"></span>
+              <span><strong>Mode simulation</strong><small>Aucune écriture sur Cloudflare</small></span>
+            </label>
+            <label class="toggle-field">
+              <input id="create-missing" type="checkbox">
+              <span class="toggle"></span>
+              <span><strong>Créer les absents</strong><small>Ajoute les entrées introuvables</small></span>
+            </label>
+          </div>
+          <details class="advanced-settings">
+            <summary>Sources d’adresses IP</summary>
+            <div class="settings-grid">
+              <label class="field">
+                <span>Service IPv4</span>
+                <input id="ipv4-url" type="url" required>
+              </label>
+              <label class="field">
+                <span>Service IPv6</span>
+                <input id="ipv6-url" type="url" required>
+              </label>
+            </div>
+          </details>
+        </section>
+
+        <section class="records-section">
+          <div class="section-heading records-heading">
+            <div>
+              <h2>Enregistrements DNS</h2>
+              <p><span id="record-count">0</span> enregistrement</p>
+            </div>
+            <button id="add-record" class="button outline" type="button">+ Ajouter</button>
+          </div>
+          <div id="records" class="records-list"></div>
+        </section>
+
+        <footer class="form-actions">
+          <span id="save-state" role="status"></span>
+          <button id="save-button" class="button primary" type="submit">Enregistrer la configuration</button>
+        </footer>
+      </form>
+    </main>
+
+    <template id="record-template">
+      <article class="record-card">
+        <div class="record-index" aria-hidden="true"></div>
+        <label class="field name-field">
+          <span>Nom DNS ou libellé</span>
+          <input class="record-name" type="text" placeholder="www, @ ou maison.example.com" required>
+        </label>
+        <label class="field type-field">
+          <span>Type</span>
+          <select class="record-type">
+            <option value="A">A · IPv4</option>
+            <option value="AAAA">AAAA · IPv6</option>
+          </select>
+        </label>
+        <label class="field zone-field">
+          <span>Zone</span>
+          <select class="record-zone">
+            <option value="">Automatique</option>
+          </select>
+        </label>
+        <label class="field proxy-field">
+          <span>Proxy</span>
+          <select class="record-proxied">
+            <option value="">Conserver</option>
+            <option value="true">Activé</option>
+            <option value="false">Désactivé</option>
+          </select>
+        </label>
+        <label class="field ttl-field">
+          <span>TTL</span>
+          <input class="record-ttl" type="number" min="1" max="86400" placeholder="Conserver">
+        </label>
+        <button class="delete-record" type="button" title="Supprimer cet enregistrement" aria-label="Supprimer cet enregistrement">×</button>
+      </article>
+    </template>
+
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
