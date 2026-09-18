@@ -1,0 +1,11 @@
+{
+  "domain": "nfl",
+  "name": "NFL",
+  "version": "0.1.0",
+  "documentation": "https://github.com/IdSec-Inc/HA-Addons",
+  "issue_tracker": "https://github.com/IdSec-Inc/HA-Addons/issues",
+  "codeowners": ["@IdSec-Inc"],
+  "config_flow": true,
+  "iot_class": "cloud_polling",
+  "requirements": []
+}

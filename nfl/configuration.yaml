@@ -4,7 +4,7 @@ sensor:
     unique_id: nfl_standings_raw
     resource: https://site.web.api.espn.com/apis/v2/sports/football/nfl/standings?seasontype=2&level=3
     scan_interval: 21600   # 6h : le classement ne change pas souvent
-    value_template: "{{ now() }}"
+    value_template: "OK"
     json_attributes:
       - children
 
@@ -13,7 +13,7 @@ sensor:
     unique_id: nfl_preseason_standings_raw
     resource: https://site.web.api.espn.com/apis/v2/sports/football/nfl/standings?seasontype=1&level=3
     scan_interval: 21600
-    value_template: "{{ now() }}"
+    value_template: "OK"
     json_attributes:
       - children
  
@@ -23,7 +23,7 @@ sensor:
     resource_template: >-
       https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates={{ now().strftime('%Y%m%d') }}-{{ (now() + timedelta(days=14)).strftime('%Y%m%d') }}
     scan_interval: 300     # 5 min : pour suivre les matchs en direct
-    value_template: "{{ now() }}"
+    value_template: "OK"
     json_attributes:
       - events
  
@@ -32,7 +32,7 @@ template:
   - sensor:
       - name: "NFL Classement Complet"
         unique_id: nfl_standings_flat
-        state: "{{ now() }}"
+        state: "{{ states('sensor.nfl_classement_brut') }}"
         attributes:
           teams: >-
             {% set ns = namespace(teams=[]) %}
@@ -46,9 +46,9 @@ template:
                     'conference': conf.name,
                     'division': div.name,
                     'team': entry.team.displayName,
-                    'wins': wins_l[0] if wins_l else '',
-                    'losses': losses_l[0] if losses_l else '',
-                    'pct': pct_l[0] if pct_l else ''
+                    'wins': wins_l[0] | int(0) if wins_l else 0,
+                    'losses': losses_l[0] | int(0) if losses_l else 0,
+                    'pct': pct_l[0] | float(0) if pct_l else 0
                   }] %}
                 {% endfor %}
               {% endfor %}
@@ -57,7 +57,7 @@ template:
 
       - name: "NFL Classement Pre-saison"
         unique_id: nfl_preseason_standings_flat
-        state: "{{ now() }}"
+        state: "{{ states('sensor.nfl_classement_pre_saison_brut') }}"
         attributes:
           teams: >-
             {% set ns = namespace(teams=[]) %}
@@ -71,9 +71,9 @@ template:
                     'conference': conf.name,
                     'division': div.name,
                     'team': entry.team.displayName,
-                    'wins': wins_l[0] if wins_l else '',
-                    'losses': losses_l[0] if losses_l else '',
-                    'pct': pct_l[0] if pct_l else ''
+                    'wins': wins_l[0] | int(0) if wins_l else 0,
+                    'losses': losses_l[0] | int(0) if losses_l else 0,
+                    'pct': pct_l[0] | float(0) if pct_l else 0
                   }] %}
                 {% endfor %}
               {% endfor %}
@@ -82,11 +82,11 @@ template:
  
       - name: "NFL Classement Global"
         unique_id: nfl_standings_global
-        state: "{{ now() }}"
+        state: "{{ states('sensor.nfl_classement_complet') }}"
         attributes:
           teams: >-
             {% set standings = state_attr('sensor.nfl_classement_complet', 'teams') or [] %}
-            {% set sorted_teams = standings | sort(attribute='losses') | sort(attribute='wins', reverse=true) | sort(attribute='pct', reverse=true) %}
+            {% set sorted_teams = standings | sort(attribute='losses') | sort(attribute='pct', reverse=true) | sort(attribute='wins', reverse=true) %}
             {% set ns = namespace(teams=[]) %}
             {% for team in sorted_teams %}
               {% set ns.teams = ns.teams + [team | combine({'rank': loop.index})] %}

@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "NFL",
+        "description": "Ajouter les classements et les matchs NFL depuis ESPN."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "L'integration NFL est deja configuree."
+    }
+  }
+}
