@@ -15,7 +15,7 @@ Cette integration interroge les API publiques ESPN et expose les entites suivant
 Les donnees detaillees sont disponibles dans l'attribut `teams` pour les classements
 et `games` pour les matchs.
 
-## Installation locale
+## Installation manuelle
 
 1. Copier `custom_components/nfl` dans `/config/custom_components/nfl`.
 2. Redemarrer Home Assistant.
