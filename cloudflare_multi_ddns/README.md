@@ -13,5 +13,5 @@ DNS Cloudflare à jour avec l'adresse IP publique de votre connexion.
 - création facultative des enregistrements manquants;
 - mode `dry_run` pour tester sans modifier Cloudflare.
 
-Consultez [la documentation de l'add-on](cloudflare_multi_ddns/DOCS.md) pour
+Consultez [la documentation de l'add-on](DOCS.md) pour
 l'installation et la configuration.
