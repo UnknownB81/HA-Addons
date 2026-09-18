@@ -1,5 +1,9 @@
 # Integration NFL pour Home Assistant
 
+Ce dossier doit etre publie comme racine d'un depot GitHub dedie, par exemple
+`UnknownB81/HA-NFL`. Ne l'ajoute pas directement depuis le depot `HA-Addons`,
+qui est un depot d'add-ons Home Assistant.
+
 Cette integration interroge les API publiques ESPN et expose les entites suivantes :
 
 - `sensor.nfl_classement_complet`
@@ -18,6 +22,14 @@ et `games` pour les matchs.
 3. Ouvrir **Parametres > Appareils et services > Ajouter une integration**.
 4. Rechercher `NFL` et valider l'ajout.
 5. Ajouter la carte presente dans `sample-card.yaml` au dashboard Lovelace.
+
+## Installation avec HACS
+
+1. Creer un depot GitHub dedie `UnknownB81/HA-NFL`.
+2. Publier le contenu de ce dossier a la racine de ce nouveau depot.
+3. Dans HACS, ajouter `UnknownB81/HA-NFL` comme depot personnalise de type
+	**Integration**.
+4. Installer `NFL`, puis redemarrer Home Assistant.
 
 L'installation ne necessite aucune cle API ESPN.
 
